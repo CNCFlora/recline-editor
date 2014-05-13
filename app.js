@@ -4,13 +4,36 @@ jQuery(function($) {
 
     var from = getQueryVariable('from');
     var to = getQueryVariable('to');
+    var edit = getQueryVariable('edit');
 
     if(from) {
         var url = atob(from).replace("&quot;","\"").replace(/%26quot%3B/g,"\"").replace(/%20/g,"+")+"&callback=?";
         $.getJSON(url.replace("&quot;","\""),function(records){
 
+            var fields=[];
+
+            for(var i in records[0]) {
+                if(typeof records[0][i] == 'object') {
+                } else if(typeof records[0][i] == 'number') {
+                    fields.push({id:i,type:'number'})
+                } else {
+                    fields.push({id:i})
+                }
+            }
+
+            fields.sort(function(a,b){
+                if(a.id=='georeferenceVerificationStatus' || a.id=='decimalLatitude' || a.id=='decimalLongitude') {
+                    return +1;
+                } else if(b.id=='georeferenceVerificationStatus' || b.id=='decimalLatitude' || b.id=='decimalLongitude') {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+
             createExplorer(new recline.Model.Dataset({
-                    records: records
+                records: records,
+                fields: fields
             }));
 
             if(to) {
@@ -55,7 +78,8 @@ var createExplorer = function(dataset) {
                         autoEdit: false,
                         enableCellNavigation: true
                     }
-                }
+                },
+                //columnsEditor: dataset.columns
             })
         },
         {
