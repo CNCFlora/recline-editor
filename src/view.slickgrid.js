@@ -175,6 +175,7 @@ my.SlickGrid = Backbone.View.extend({
         field: field.id,
         sortable: true,
         minWidth: 80,
+        width: 200,
         formatter: formatter,
         validator:validator(field)
       };

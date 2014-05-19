@@ -11,7 +11,8 @@ Example:
     <script>
     var urlWithData = 'http://localhost/records.json';
     var urlToPostData = 'http://localhost/save';
-    location.href='http://localhost/editor/index.html?from='+btoa(urlWithData)+'to='+btoa(urlToPostData);
+    var fields = 'afield:atitle,anotherfield:anothertitle,otherfield'; // optional
+    location.href='http://localhost/editor/index.html?from='+btoa(urlWithData)+'to='+btoa(urlToPostData)+'fields='+fields;
     </script>
 
 ## License
