@@ -8,7 +8,7 @@ jQuery(function($) {
     //var dFields = 'occurrenceID,family,scientificName,recordedBy:collector,recordNumber:collectorNumber,collectionCode:collection,catalogNumber,stateProvince:state,municipality:city,locality,remarks,decimalLatitude:latitude,decimalLongitude:longitude,georeferenceVerificationStatus:geoStatus,georeferenceProtocol:geoProtocol,coordinateUncertaintyInMeters:geoPrecision';
 
     if(from) {
-        var url = atob(from).replace("&quot;","\"").replace(/%26quot%3B/g,"\"").replace(/%20/g,"+")+"&callback=?";
+        var url = from+"&callback=?";
         $.getJSON(url.replace("&quot;","\""),function(records){
 
             var fields=[];
@@ -34,7 +34,7 @@ jQuery(function($) {
             })); 
 
             if(to) {
-                var url = atob(to);
+                var url = to;
                 var bt = $("<buttton>Finish and Save</button>");
                 bt.on('click',function(){
                     var data = JSON.stringify(_data.records.models.map(function(a){return a.attributes;}));
@@ -44,9 +44,10 @@ jQuery(function($) {
                     form.submit();
                 });
                 bt.addClass('btn');
-                $(".menu-right a").remove();
                 $(".menu-right").append(bt);
             }
+
+            $(".menu-right a").remove();
 
         });
 
