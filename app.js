@@ -37,7 +37,7 @@ jQuery(function($) {
                 var url = to;
                 var bt = $("<buttton>Finish and Save</button>");
                 bt.on('click',function(){
-                    var data = JSON.stringify(_data.records.models.map(function(a){return a.attributes;}));
+                    var data = JSON.stringify(_data.records.models.map(function(a){return a.attributes;})).replace(/'/g,"`");
                     var form = $('<form method="POST" action="'+url+'"></form>');
                     form.append('<input name="data" type="hidden" value=\''+data+'\'" />');
                     $("body").append(form);
