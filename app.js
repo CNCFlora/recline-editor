@@ -1,4 +1,5 @@
 var _data;
+var fields=[];
 
 jQuery(function($) {
 
@@ -11,12 +12,13 @@ jQuery(function($) {
         var url = from+"&callback=?";
         $.getJSON(url.replace("&quot;","\""),function(records){
 
-            var fields=[];
             if(dFields) {
                 fields = dFields.split(','); 
             } else {
                 for(var i in records[0]) {
-                    fields.push(i);
+                    if(typeof records[0][i] != 'object') {
+                        fields.push(i);
+                    }
                 }
             }
 
@@ -46,6 +48,28 @@ jQuery(function($) {
                 bt.addClass('btn');
                 $(".menu-right").append(bt);
             }
+
+            var downLink = $("<a href='blob:data' download='data.csv'>Download as CSV</a>");
+            $(".container").append(downLink);
+            downLink.click(function(){
+                var data = _data.records.models.map(function(a){
+                        return a.attributes;
+                    }).map(function(a){
+                         var ar =[];
+                         for(var i in fields) {
+                             if(typeof a[fields[i]] != "undefined") {
+                                 ar.push(a[fields[i]].replace(";",","));
+                             } else {
+                                 ar.push(null);
+                             }
+                         }
+                         return ar;
+                    });
+                var encodedUri = encodeURI(toCSV(data));
+                console.log(encodedUri);
+                $(this).attr("href",encodedUri);
+                return true;
+            });
 
             $(".menu-right a").remove();
 
@@ -105,6 +129,14 @@ var createExplorer = function(dataset) {
 
 }
 
+function toCSV(data) {
+    var csvContent = "data:text/csv;charset=utf8,"+fields.map(function(f){ return /[a-zA-Z]+$/.exec(f)[0]; }).join(";")+"\n";
+    data.forEach(function(infoArray, index){
+        dataString = infoArray.join(";");
+        csvContent += index < infoArray.length ? dataString+ "\n" : dataString;
+    }); 
+    return csvContent;
+}
 
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
