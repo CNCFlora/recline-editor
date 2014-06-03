@@ -6,7 +6,6 @@ jQuery(function($) {
     var from = getQueryVariable('from');
     var to = getQueryVariable('to');
     var dFields = getQueryVariable('fields');
-    //var dFields = 'occurrenceID,family,scientificName,recordedBy:collector,recordNumber:collectorNumber,collectionCode:collection,catalogNumber,stateProvince:state,municipality:city,locality,remarks,decimalLatitude:latitude,decimalLongitude:longitude,georeferenceVerificationStatus:geoStatus,georeferenceProtocol:geoProtocol,coordinateUncertaintyInMeters:geoPrecision';
 
     if(from) {
         var url = from+"&callback=?";
@@ -15,9 +14,11 @@ jQuery(function($) {
             if(dFields) {
                 fields = dFields.split(','); 
             } else {
-                for(var i in records[0]) {
-                    if(typeof records[0][i] != 'object') {
-                        fields.push(i);
+                for(var c in records) {
+                    for(var i in records[c]) {
+                        if(typeof records[c][i] != 'object') {
+                            fields.push(i);
+                        }
                     }
                 }
             }
@@ -58,7 +59,15 @@ jQuery(function($) {
                          var ar =[];
                          for(var i in fields) {
                              if(typeof a[fields[i]] != "undefined") {
-                                 ar.push(a[fields[i]].replace(";",","));
+                                 if(typeof a[fields[i]] == 'string') {
+                                     if(a[fields[i]] != null) {
+                                         ar.push(a[fields[i]].replace(";",","));
+                                     } else {
+                                         ar.push(null);
+                                     }
+                                 } else {
+                                     ar.push(a[fields[i]]);
+                                 }
                              } else {
                                  ar.push(null);
                              }
