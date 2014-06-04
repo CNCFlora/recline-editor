@@ -58,15 +58,16 @@ jQuery(function($) {
                     }).map(function(a){
                          var ar =[];
                          for(var i in fields) {
-                             if(typeof a[fields[i]] != "undefined") {
-                                 if(typeof a[fields[i]] == 'string') {
-                                     if(a[fields[i]] != null) {
-                                         ar.push(a[fields[i]].replace(";",","));
+                             var f = /^[a-zA-Z]+/.exec(fields[i])[0];
+                             if(typeof a[f] != "undefined") {
+                                 if(typeof a[f] == 'string') {
+                                     if(a[f] != null) {
+                                         ar.push(a[f].replace(/;/g,",").replace(/"/g,"'"));
                                      } else {
                                          ar.push(null);
                                      }
                                  } else {
-                                     ar.push(a[fields[i]]);
+                                     ar.push(a[f]);
                                  }
                              } else {
                                  ar.push(null);
@@ -75,7 +76,6 @@ jQuery(function($) {
                          return ar;
                     });
                 var encodedUri = encodeURI(toCSV(data));
-                console.log(encodedUri);
                 $(this).attr("href",encodedUri);
                 return true;
             });
@@ -142,7 +142,7 @@ function toCSV(data) {
     var csvContent = "data:text/csv;charset=utf8,"+fields.map(function(f){ return /[a-zA-Z]+$/.exec(f)[0]; }).join(";")+"\n";
     data.forEach(function(infoArray, index){
         dataString = infoArray.join(";");
-        csvContent += index < infoArray.length ? dataString+ "\n" : dataString;
+        csvContent +=  dataString+ "\n";
     }); 
     return csvContent;
 }
