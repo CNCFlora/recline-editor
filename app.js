@@ -8,8 +8,12 @@ jQuery(function($) {
     var dFields = getQueryVariable('fields');
 
     if(from) {
+        if(from.indexOf("?") < 0) {
+            from+="?";
+        }
         var url = from+"&callback=?";
         $.getJSON(url.replace("&quot;","\""),function(records){
+            if(records.length <= 0) alert("no data");
 
             if(dFields) {
                 fields = dFields.split(','); 
