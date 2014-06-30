@@ -17,7 +17,13 @@ jQuery(function($) {
                 for(var c in records) {
                     for(var i in records[c]) {
                         if(typeof records[c][i] != 'object') {
-                            fields.push(i);
+                            var got=false;
+                            for(var o in fields) {
+                                if(fields[o] == i) {
+                                    got=true;
+                                }
+                            }
+                            if(!got) fields.push(i);
                         }
                     }
                 }
@@ -25,9 +31,9 @@ jQuery(function($) {
 
             var columns = fields.map(function(f){
                 return {
-                    id: /^[a-zA-Z]+/.exec(f)[0],
+                    id: /^[a-zA-Z0-9_]+/.exec(f)[0],
                     width: 300,
-                    label: /[a-zA-Z]+$/.exec(f)[0]
+                    label: /[a-zA-Z0-9_]+$/.exec(f)[0]
                 }
             });
 
