@@ -68,7 +68,7 @@ jQuery(function($) {
                     }).map(function(a){
                          var ar =[];
                          for(var i in fields) {
-                             var f = /^[a-zA-Z]+/.exec(fields[i])[0];
+                             var f = /^[a-zA-Z0-9_]+/.exec(fields[i])[0];
                              if(typeof a[f] != "undefined") {
                                  if(typeof a[f] == 'string') {
                                      if(a[f] != null) {
