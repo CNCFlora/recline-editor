@@ -63,9 +63,7 @@ jQuery(function($) {
             var downLink = $("<a href='blob:data' download='data.csv'>Download as CSV</a>");
             $(".container").append(downLink);
             downLink.click(function(){
-                var data = _data.records.models.map(function(a){
-                        return a.attributes;
-                    }).map(function(a){
+                var data = _data.attributes.records.map(function(a){
                          var ar =[];
                          for(var i in fields) {
                              var f = /^[a-zA-Z0-9_]+/.exec(fields[i])[0];
