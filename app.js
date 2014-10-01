@@ -60,33 +60,8 @@ jQuery(function($) {
                 $(".menu-right").append(bt);
             }
 
-            var downLink = $("<a href='blob:data' download='data.csv'>Download as CSV</a>");
+            var downLink = $("<a href='http://cncflora.jbrj.gov.br/dwc_services/api/v1/convert?from=json&to=csv&url="+encodeURIComponent(from)+"' download='data.csv'>Download as CSV</a>");
             $(".container").append(downLink);
-            downLink.click(function(){
-                var data = _data.attributes.records.map(function(a){
-                         var ar =[];
-                         for(var i in fields) {
-                             var f = /^[a-zA-Z0-9_]+/.exec(fields[i])[0];
-                             if(typeof a[f] != "undefined") {
-                                 if(typeof a[f] == 'string') {
-                                     if(a[f] != null) {
-                                         ar.push(a[f].replace(/;/g,",").replace(/"/g,"'"));
-                                     } else {
-                                         ar.push(null);
-                                     }
-                                 } else {
-                                     ar.push(a[f]);
-                                 }
-                             } else {
-                                 ar.push(null);
-                             }
-                         }
-                         return ar;
-                    });
-                var encodedUri = encodeURI(toCSV(data));
-                $(this).attr("href",encodedUri);
-                return true;
-            });
 
             $(".menu-right a").remove();
 
@@ -144,15 +119,6 @@ var createExplorer = function(dataset) {
         views: views
     });
 
-}
-
-function toCSV(data) {
-    var csvContent = "data:text/csv;charset=utf8,"+fields.map(function(f){ return /[a-zA-Z]+$/.exec(f)[0]; }).join(";")+"\n";
-    data.forEach(function(infoArray, index){
-        dataString = infoArray.join(";");
-        csvContent +=  dataString+ "\n";
-    }); 
-    return csvContent;
 }
 
 function getQueryVariable(variable) {
